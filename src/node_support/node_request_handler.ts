@@ -25,7 +25,7 @@ import {BasicQueryStringUtils, QueryStringUtils} from '../query_string_utils';
 import {NodeCrypto} from './crypto_utils';
 
 import 'url-search-params-polyfill';
-(Url.URLSearchParams as any) = new URLSearchParams();
+(Url.URLSearchParams as any) = URLSearchParams;
 
 // TypeScript typings for `opener` are not correct and do not export it as module
 import opener = require('opener');

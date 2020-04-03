@@ -39,6 +39,8 @@ export class NodeBasedHandler extends AuthorizationRequestHandler {
   // the handle to the current authorization request
   authorizationPromise: Promise<AuthorizationRequestResponse|null>|null = null;
 
+  server: Http.Server;
+
   constructor(
       // default to port 8000
       public httpServerPort = 8000,
@@ -106,9 +108,9 @@ export class NodeBasedHandler extends AuthorizationRequestHandler {
       });
     });
 
-    let server: Http.Server;
     request.setupCodeVerifier()
         .then(() => {
+          if (server) server.close();
           server = Http.createServer(requestHandler);
           server.listen(this.httpServerPort);
           const url = this.buildRequestUrl(configuration, request);

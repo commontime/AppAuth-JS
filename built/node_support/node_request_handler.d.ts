@@ -7,6 +7,7 @@ import 'url-search-params-polyfill';
 export declare class NodeBasedHandler extends AuthorizationRequestHandler {
     httpServerPort: number;
     authorizationPromise: Promise<AuthorizationRequestResponse | null> | null;
+    private server;
     constructor(httpServerPort?: number, utils?: QueryStringUtils, crypto?: Crypto);
     performAuthorizationRequest(configuration: AuthorizationServiceConfiguration, request: AuthorizationRequest): void;
     protected completeAuthorizationRequest(): Promise<AuthorizationRequestResponse | null>;

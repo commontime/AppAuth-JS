@@ -39,7 +39,7 @@ export class NodeBasedHandler extends AuthorizationRequestHandler {
   // the handle to the current authorization request
   authorizationPromise: Promise<AuthorizationRequestResponse|null>|null = null;
 
-  server: Http.Server;
+  private server: Http.Server | null;
 
   constructor(
       // default to port 8000
@@ -47,6 +47,7 @@ export class NodeBasedHandler extends AuthorizationRequestHandler {
       utils: QueryStringUtils = new BasicQueryStringUtils(),
       crypto: Crypto = new NodeCrypto()) {
     super(utils, crypto);
+    this.server = null;
   }
 
   performAuthorizationRequest(
@@ -100,7 +101,7 @@ export class NodeBasedHandler extends AuthorizationRequestHandler {
         reject(`Unable to create HTTP server at port ${this.httpServerPort}`);
       });
       emitter.once(ServerEventsEmitter.ON_AUTHORIZATION_RESPONSE, (result: any) => {
-        server.close();
+        if(this.server) this.server.close();
         // resolve pending promise
         resolve(result as AuthorizationRequestResponse);
         // complete authorization flow
@@ -110,9 +111,9 @@ export class NodeBasedHandler extends AuthorizationRequestHandler {
 
     request.setupCodeVerifier()
         .then(() => {
-          if (server) server.close();
-          server = Http.createServer(requestHandler);
-          server.listen(this.httpServerPort);
+          if (this.server) this.server.close();
+          this.server = Http.createServer(requestHandler);
+          this.server.listen(this.httpServerPort);
           const url = this.buildRequestUrl(configuration, request);
           log('Making a request to ', request, url);
           opener(url);

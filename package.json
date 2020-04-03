@@ -1,6 +1,6 @@
 {
   "name": "@commontimeltd/appauth",
-  "version": "1.2.7-ct2",
+  "version": "1.2.7-ct3",
   "description": "A general purpose OAuth client.",
   "author": "The OpenID Foundation",
   "license": "Apache-2.0",
